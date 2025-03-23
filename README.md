@@ -37,6 +37,111 @@ A sophisticated fire detection system using computer vision and a community-driv
 - Alert verification requires 3 votes
 - Alert confirmed if 2+ votes are positive
 
+## 📡 API Endpoints
+
+### Camera Management
+```http
+POST /api/cameras/
+```
+- Register a new camera in the system
+- **Body**: 
+  ```json
+  {
+    "name": "string",
+    "location_name": "string",
+    "latitude": "float",
+    "longitude": "float"
+  }
+  ```
+- **Response**: Camera details with ID
+
+```http
+GET /api/cameras/
+```
+- List all registered cameras
+- **Response**: Array of camera objects
+
+### Fire Alerts
+```http
+POST /api/fire-alerts/
+```
+- Submit a new fire alert
+- **Body**: 
+  ```json
+  {
+    "camera_id": "integer",
+    "image": "file",
+    "latitude": "float",
+    "longitude": "float",
+    "fire_size": "string (small/medium/large)"
+  }
+  ```
+- **Response**: Alert details with verification status
+
+```http
+GET /api/fire-alerts/
+```
+- List all fire alerts
+- **Query Parameters**:
+  - `status`: Filter by status (pending/confirmed/false_alarm)
+  - `camera_id`: Filter by camera
+- **Response**: Array of fire alerts
+
+### User Management
+```http
+POST /api/profile/
+```
+- Create a new user profile
+- **Body**:
+  ```json
+  {
+    "username": "string",
+    "guardian_points": "integer",
+    "rank": "string (rookie/guardian/expert/master)",
+    "is_available": "boolean"
+  }
+  ```
+- **Response**: User profile details
+
+```http
+GET /api/profile/
+```
+- List all user profiles
+- **Query Parameters**:
+  - `rank`: Filter by rank
+  - `is_available`: Filter by availability
+- **Response**: Array of user profiles
+
+### Alert Verification
+```http
+POST /api/verify-fire/
+```
+- Submit a verification vote for a fire alert
+- **Body**:
+  ```json
+  {
+    "alert_id": "integer",
+    "user_id": "integer",
+    "vote": "boolean"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "status": "success/error",
+    "points_earned": "integer",
+    "new_total_points": "integer"
+  }
+  ```
+
+### Response Status Codes
+- `200`: Success
+- `201`: Created
+- `400`: Bad Request
+- `401`: Unauthorized
+- `404`: Not Found
+- `500`: Server Error
+
 ## 🛠️ Technical Stack
 
 ### Backend (Django)
